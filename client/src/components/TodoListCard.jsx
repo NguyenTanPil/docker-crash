@@ -6,9 +6,13 @@ export function TodoListCard() {
     const [items, setItems] = useState(null);
 
     useEffect(() => {
-        fetch('/api/items')
-            .then((r) => r.json())
-            .then(setItems);
+        // fetch('/api/items')
+        //     .then((r) => {
+        //         console.log({ r: r.json() });
+        //         return r.json();
+        //     })
+        //     .then(setItems);
+        setItems([]);
     }, []);
 
     const onNewItem = useCallback(
@@ -44,7 +48,9 @@ export function TodoListCard() {
         <>
             <AddItemForm onNewItem={onNewItem} />
             {items.length === 0 && (
-                <p className="text-center">No items yet! Add one above!</p>
+                <p className="text-center">
+                    You have no todo items yet! Add one above!
+                </p>
             )}
             {items.map((item) => (
                 <ItemDisplay

@@ -4,7 +4,7 @@
 # This base stage ensures all other stages are using the same base image
 # and provides common configuration for all stages, such as the working dir.
 ###################################################
-FROM node:20 AS base
+FROM node:18 AS base
 WORKDIR /usr/local/app
 
 ################## CLIENT STAGES ##################
@@ -17,8 +17,7 @@ WORKDIR /usr/local/app
 ###################################################
 FROM base AS client-base
 COPY client/package.json client/yarn.lock ./
-RUN --mount=type=cache,id=yarn,target=/usr/local/share/.cache/yarn \
-    yarn install
+RUN yarn install --production
 COPY client/.eslintrc.cjs client/index.html client/vite.config.js ./
 COPY client/public ./public
 COPY client/src ./src
@@ -39,7 +38,8 @@ CMD ["yarn", "dev"]
 # JS files that can be served by the backend.
 ###################################################
 FROM client-base AS client-build
-RUN yarn build
+RUN npm i vite
+RUN npm run build
 
 
 
